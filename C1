@@ -1,0 +1,16 @@
+#include <stdio.h>
+//#include <stdlib.h>
+int main(){
+ //列数*行数=结果
+ //每一行，列数<=行数
+	for (int row = 1; row < 10; row++){
+		//int ret = 0;
+		for (int col = 1; col <=row; col++){
+			//ret = row*col;
+			printf("%d * %d = %d  ",col,row,col*row);
+		}
+		printf("\n");
+	}
+	system("pause");
+	return 0;
+}
