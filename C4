@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <math.h>
+void PrintLine(int blank_cnt, int star_cnt){
+	for (int i = 0; i < blank_cnt; ++i){
+		printf(" ");
+	}
+	for (int i = 0; i < star_cnt; ++i){
+		printf("*");
+	}
+	printf("\n");
+}
+void PrintLingXing(int height){
+	//上半部分
+	for (int i = 1; i <= height; ++i){
+		PrintLine(height+1 - i, 2 * i - 1);
+	} 
+	//中间部分
+	PrintLine(0, 2 * (height+1) - 1);
+	//下半部分
+	for (int i = height; i >= 1; --i){
+		PrintLine(height+1 - i, 2 * i - 1);
+
+	}
+}
+int Isshuixian(int num){
+	int tmp = num;
+	int x1 = num % 10;
+	num /= 10;
+	int x2 = num % 10;
+	num /= 10;
+	int x3 = num % 10;
+	if (x1*x1*x1 + x2*x2*x2 + x3*x3*x3 == tmp){
+		return 1;
+	}
+	return 0;
+}
+//2
+//22=2*10^1+2*10^0
+//222=2*10^2+2*10^1+2*10^0
+//第n项
+int CreateNum(int a, int n){
+	if (a > 9 || a <= 0 || n <= 0){
+		return 0;
+	}
+	int num = 0;
+	for (int i = 0; i < n; ++i){
+		num += a*(int)pow(10, i);
+		//强制类型转换
+	}
+	return num;
+}
+int main(){
+	printf("%d\n", CreateNum(2, 5));
+	int a = 1;
+	int sum = 0;
+	for (int i = 1; i <= 5; ++i){
+		sum += CreateNum(a, i);
+	}
+	printf("sum=%d\n", sum);
+
+
+
+	//for (int i = 100; i <= 999; i++){
+	//	if (isshuixian(i)){
+	//		printf("%d\n", i);
+	//	}
+	//}
+
+
+	//如何打印任意大小的菱形，需要考虑用什么作为菱形大小的衡量标准
+	//取对角线的一半作为标准
+	//PrintLingXing(10);
+
+	////上半部分
+	////1行 6空格，1星号
+	////2行 5空格，3星号
+	////i行 7-i空格，2*i-1星号
+	//for (int i = 1; i <= 6; ++i){
+	//	PrintLine(7 - i, 2 * i - 1);
+	//} 
+	////中间部分
+	//PrintLine(0, 2 * 7 - 1);
+	////下半部分
+	//for (int i = 6; i >= 1; --i){
+	//	PrintLine(7 - i, 2 * i - 1);
+	//}
+	system("pause");
+}
