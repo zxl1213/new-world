@@ -1,0 +1,67 @@
+#include <stdio.h>
+int MaxGongYue(int x, int y){
+	int max_gongyue = 0;
+	int num = 1;
+	while (num <= x && num <= y){
+		if (x%num == 0 && y%num == 0){
+			max_gongyue = num;
+		}
+		++num;
+	}
+	return max_gongyue;
+
+}
+int main() {
+	printf("%d\n", MaxGongYue(100, 20));
+	//int a = 10;
+	//int b = 20;
+	//int c = 30;
+	//if (a < b){
+	//	//交换ab
+	//	int tmp = a;
+	//	a = b;
+	//	b = tmp;
+	//}
+	//if (a < c){
+	//	int tmp = a;
+	//	a = c;
+	//	c = tmp;
+	//}
+	//printf("%d\n", a);
+	//if (b >= c){
+	//	printf("%d\n", b);
+	//	printf("%d\n", c);
+	//}
+	//else{
+	//	printf("%d\n", c);
+	//	printf("%d\n", b);
+	//}
+	//int arr[] = {1,3,4,5,7,10,6,3,11,5};
+	//int max = arr[0];
+	//for (int i = 0; i < sizeof (arr) / sizeof (arr[0]); ++i)
+	//{
+	//	if (arr[i]>max)
+	//		max = arr[i];
+	//}
+	//printf("%d\n",max);
+
+//	int a = 10;
+//	int b = 20;
+//方法1
+//  int c;
+//	c = a;
+//	a = b;
+//	b = c;
+//方法2
+//数字过大会溢出
+//	a = a + b;
+//	b = a - b;
+//	a = a - b;
+//方法3
+//	a = a^b;
+//	b = a^b;
+//	a = a^b;
+//	printf("%d,%d",a,b);
+	system("pause");
+    return 0;
+}
