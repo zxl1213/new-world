@@ -1,0 +1,51 @@
+#include <stdio.h>
+int Ninecount(int x){
+	int count = 0;
+	if (x % 10 == 9){
+		++count;
+	}
+	if (x / 10 == 9){
+		++count;
+	}
+	return count;
+}
+
+
+int main(){
+	int count = 0;
+	for (int i = 0; i < 100; ++i){
+		count += Ninecount(i);
+	}
+	printf("%d\n", count);
+
+
+	//double sum = 0;
+	//for (int i = 1; i <= 100; ++i){
+	//	if (i % 2 == 1){
+	////隐式类型转换
+	//		sum += (double)1 / (double)i;
+	//	}else{
+	//		sum -= (double)1 / (double)i;
+	//	}
+	//}
+	//printf("%f\n", sum);
+
+
+	////交换两个长度相同的数组元素
+	//int arr1[] = { 1, 2, 3, 4 };
+	//int arr2[] = { 5, 6, 7, 8 };
+	//for (int i = 0; i < sizeof(arr1) / sizeof(arr1[0]); ++i){
+	//	int tmp = arr1[i];
+	//	arr1[i] = arr2[i];
+	//	arr2[i] = tmp;
+	//}
+	//printf("数组1:\n");
+	//for (int i = 0; i < sizeof(arr1) / sizeof(arr1[0]); ++i){
+	//	printf("%d\n", arr1[i]);
+	//}
+	//printf("数组1:\n");
+	//for (int i = 0; i < sizeof(arr1) / sizeof(arr1[0]); ++i){
+	//	printf("%d\n", arr2[i]);
+	//}
+	system("pause");
+}
