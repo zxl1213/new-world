@@ -1,0 +1,26 @@
+#include <stdio.h>
+int Fib(int n){
+	if (n == 1 || n == 2){
+		return 1;
+	}
+	//n1 n-1项；n2 n-2项
+	int n_1 = 1;
+	int n_2 = 1;
+	int n_i = 0;
+	for (int i = 3; i <= n; ++i){
+		n_i = n_2 + n_1;
+		n_2 = n_1;
+		n_1 = n_i;
+	
+	}
+	return n_i;
+	//if (n == 1 || n == 2){
+	//	return 1;
+	//}
+	//return Fib(n - 1) + Fib(n - 2);
+}
+int main(){
+	printf("%d\n",Fib(6));
+    system("pause");
+    return 0;
+}
