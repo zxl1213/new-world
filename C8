@@ -1,0 +1,133 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+//三个子连成一条线，横竖斜都算获胜
+//玩家，电脑
+//轮到玩家落子，提示玩家输入坐标
+//轮到电脑落子，随机找一空白坐标落子
+#define ROW 3
+#define COL 3
+//对于局部变量，没初始化，确实是随机值（栈上的残留数据）
+//对于全局变量，没显式初始化，就会默认初始化为零
+//二维数组表示棋盘
+char g_board[ROW][COL];
+//g_全局变量
+//棋盘上的每个位置初始化成空格字符' '
+void Init(){
+	srand((unsigned int)time(0));
+	for (int row = 0; row < ROW; ++row){
+		for (int col = 0; col < COL; ++col){
+			g_board[row][col] = ' ';
+		}
+	}
+}
+void Print(){
+	printf("---|---|---\n");
+	for (int row = 0; row < ROW; ++row){
+		printf("| %c| %c |%c |\n", g_board[row][0], g_board[row][1], g_board[row][2]);
+		printf("---|---|---\n" );
+	}
+}
+void PlayerMove(){
+	printf("请玩家落子!\n");
+	while (1){
+		printf("请玩家输入坐标(row col):\n");
+		int row, col;
+		scanf("%d %d", &row, &col);
+		if (row < 0 || row >= ROW || col < 0 || col >= COL){
+			printf("输入的坐标有误，请重新输入！\n");
+			continue;
+		}
+		if (g_board[row][col] != ' '){
+			printf("当前坐标已经有子，请重新输入！\n");
+			continue;
+		}
+		g_board[row][col] = 'x';
+		break;
+	}
+}
+void ComputerMove(){
+	printf("请电脑落子\n");
+	while (1){
+		int row = rand() % ROW;
+		int col = rand() % COL;
+		if (g_board[row][col] != ' '){
+			continue;
+		}
+		g_board[row][col] = 'o';
+		break;
+	}
+}
+char CheckWinner(){
+	//检查行，列，斜线是否连成三个
+	//行
+	for (int row = 0; row < ROW; ++row){
+		if (g_board[row][0] == g_board[row][1] && g_board[row][0] == g_board[row][2] && g_board[row][0] != ' '){
+			return g_board[row][0];
+		}
+	}
+	//列
+	for (int col = 0; col < COL; ++col){
+		if (g_board[0][col] == g_board[1][col] && g_board[0][col] == g_board[2][col] && g_board[0][col] != ' '){
+			return g_board[0][col];
+		}
+	}
+	//斜线
+	if (g_board[0][0] == g_board[1][1] && g_board[0][0] == g_board[2][2] && g_board[0][0] != ' '){
+		return g_board[0][0];
+	}
+	if (g_board[2][0] == g_board[1][1] && g_board[2][0] == g_board[0][2] && g_board[2][0] != ' '){
+		return g_board[2][0];
+	}
+    return ' ';
+	//和棋
+	for (int row = 0; row < ROW; ++row){
+		for (int col = 0; col < COL; ++col){
+			if (g_board[row][col] != ' '){
+				return 'q';
+			}
+		}
+	}
+}
+int main(){
+	//自顶向下的程序设计方式
+	//1.棋盘初始化
+	Init();
+	char winner;
+	while (1){
+		//2.打印空白棋盘
+		Print();
+		//3.玩家落子，判定输赢
+		PlayerMove();
+		//玩家的子x，电脑的子o
+		//winner=>x,玩家胜
+		//winner=>o,电脑胜
+		//winner=>' ',胜负未分
+		//winner=>q,和棋
+		winner = CheckWinner();
+		if (winner != ' '){
+			break;
+		}
+		//4.电脑落子，判定输赢
+		ComputerMove();
+		winner = CheckWinner();
+		if (winner != ' '){
+			break;
+		}
+	}
+	if (winner == 'x'){
+		printf("玩家胜\n");
+	}
+	else if (winner == 'o'){
+		printf("电脑胜\n");
+	}
+	else if(winner=='q'){
+		printf("和棋\n");
+	}
+
+
+
+
+    system("pause");
+    return 0;
+}
