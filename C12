@@ -29,3 +29,29 @@ int main(){
 	system("pause");
 	return 0;
 } 
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+//直接(a+b)/2,溢出风险大
+//1.a+(b-a)>>1   a+(b-a)/2=a+b/2-a/2=(b+a)/2
+//2.a&b+(a^b)>>1=(a+b)/2
+int avg(int a, int b){
+	return a + ((b - a) >> 1);
+}
+int avg2(int a, int b){
+	return (a&b) + ((a^b) >> 1);
+}
+int avg3(int a,int b){
+	return (a + b) / 2;
+
+}
+int main(){
+	int a, b;
+	scanf("%d %d",&a,&b);
+	printf("%d\n", avg(a,b));
+	printf("%d\n", avg2(a, b));
+	printf("%d\n", avg3(a, b));
+	system("pause");
+	return 0;
+} 
