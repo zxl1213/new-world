@@ -75,3 +75,53 @@ int main(){
 	system("pause");
 	return 0;
 } 
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+int mystrlen(char* str){
+	int count = 0;
+	while (*str++){
+		count++;
+	}
+	return count;
+}
+void reverse_string(char* start,char* end){
+	while (start < end){
+		char temp = *start;
+		*start = *end;
+		*end = temp;
+		start++;
+		end--;
+	}
+}
+void reverse(char* str){
+	int len = mystrlen(str);
+	char* start = str;
+	char* end = str + len - 1;
+	char* cur = str;
+	//整体逆转一次
+	reverse_string(start,end);
+	//局部逆转
+	while (*cur){
+		char* st = cur;
+		//寻找子串尾点
+		while (*cur != ' '&&*cur != '\0'){
+			cur++;
+		}
+		//逆转子串
+		reverse_string(st, cur - 1);
+		if (*cur == ' '){
+			cur++;
+		}
+	}
+}
+int main(){
+	char str[100];
+	gets(str);
+	//scanf("%s",str);
+	reverse(str);
+	printf("%s",str);
+	system("pause");
+	return 0;
+} 
