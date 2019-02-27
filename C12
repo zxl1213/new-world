@@ -1,0 +1,31 @@
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+unsigned int reverse_bit(unsigned int val){
+	unsigned int sum = 0;
+	int i;
+	for (i = 0; i < 32;i++){
+		sum+=((val >> (i - 1)) & 1)*pow(2, 32 - i);
+	}
+	return sum;
+}
+unsigned int reverse_bit2(unsigned int val){
+	unsigned int temp = 0;
+	int i;
+	for (i = 0; i < 32; i++){
+		//保存获取的值
+		temp = temp << 1;
+		//把val的第i位保存在temp的第一位
+		temp = temp | ((val >> i) & 1);
+	}
+	return temp;
+}
+int main(){
+	unsigned int val;
+	scanf("%u",&val);
+	printf("%u\n",reverse_bit(val));
+	printf("%u\n", reverse_bit2(val));
+	system("pause");
+	return 0;
+} 
