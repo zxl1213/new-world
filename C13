@@ -1,0 +1,34 @@
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+void reverse_arrry(int a[], int n){
+	int left = 0;
+	int right = n - 1;
+	while (left<right){
+		//从左向右找第一个偶数
+		while (left < right&&a[left] % 2 != 0){
+			left++;
+		}
+		//从右向左找第一个奇数
+		while (left < right&&a[right] % 2 == 0){
+			right--;
+		}
+		//交换奇偶值
+		if (left < right){
+			a[left] = a[left] ^ a[right];
+			a[right] = a[left] ^ a[right];
+			a[left] = a[left] ^ a[right];
+		}
+	}
+}
+int main(){
+	int a[10] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	reverse_arrry(a, 10);
+	for (int i = 0; i < 10; i++){
+		printf("%d ",a[i]);
+	}
+	printf("\n");
+	system("pause");
+	return 0;
+} 
