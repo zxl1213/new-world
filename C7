@@ -1,4 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
+#include <string.h>
 int Fib(int n){
 	if (n == 1 || n == 2){
 		return 1;
@@ -11,7 +13,6 @@ int Fib(int n){
 		n_i = n_2 + n_1;
 		n_2 = n_1;
 		n_1 = n_i;
-	
 	}
 	return n_i;
 	//if (n == 1 || n == 2){
@@ -19,8 +20,92 @@ int Fib(int n){
 	//}
 	//return Fib(n - 1) + Fib(n - 2);
 }
+void reverseString(char* str){
+	if (*str){
+		char* start = str;
+		char* end = str + strlen(str) - 1;
+		while (start < end){
+			char temp = *start;
+			*start = *end;
+			*end = temp;
+			start++;
+			end--;
+		}
+	}
+}
+int m_strlen(char* str){
+	int count = 0;
+	while (*str++){
+		count++;
+		//str++;
+	}
+	return count;
+}
+void reverse_r(char* str){
+	if (*str){
+		char* start = str;
+		char* end = str + m_strlen(str) - 1;
+		//首尾内容交换
+		char temp = *start;
+		*start = *end;
+		//尾点内容暂时存为结束标记符
+		*end = '\0';
+		//逆转子串
+		reverse_r(start + 1);
+		//恢复尾点内容
+		*end = temp;
+	}
+}
+int m_strlen_r(char* str){
+	if (*str)
+		//1+字串长度
+		return 1 + m_strlen_r(str + 1);
+	else
+		//空串长度为0
+		return 0;
+}
+int jiecheng(int n){
+	int ret = 1;
+	int i = 0;
+	for (i = n; i > 0; i--){
+		ret *= i;
+	}
+	return ret;
+}
+int jiecheng_r(int n){
+	if (n <= 1){
+		return 1;
+	}
+	return n*jiecheng_r(n - 1);
+}
+void print(n){
+	if (n > 9){
+		//先打高位数字
+		print(n / 10);
+	}
+	//打印当前数字
+	printf("%d  ",n%10);
+}
+
 int main(){
-	printf("%d\n",Fib(6));
-    system("pause");
-    return 0;
+	int n;
+	scanf("%d", &n);
+	print(n);
+	printf("\n");
+
+	//int n;
+	//scanf("%d", &n);
+	//printf("%d",jiecheng_r(n));
+	//char str[100] = { 0 };
+	//scanf("%s", str);
+	//printf("%d\n",m_strlen(str+1));
+	//printf("%d\n", m_strlen_r(str + 1));
+	//reverseString(str);
+	//printf("%s\n", str);
+	//reverse_r(str);
+	//printf("%s\n", str);
+	//printf("%d\n", Fib(6));
+	system("pause");
+	return 0;
+
 }
