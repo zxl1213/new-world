@@ -40,28 +40,28 @@ void Init(char show_map[MAX_ROW + 2][MAX_COL + 2],
 		--mine_count;
 	}
 }
-void DisplayMap(char map[MAX_ROW+2][MAX_COL+2]){
+void DisplayMap(char map[MAX_ROW + 2][MAX_COL + 2]){
 	printf("   ");
 	//第一行坐标，纵坐标
-	for (int i = 1; i < MAX_COL; ++i){
-		printf("%d",i);
+	for (int i = 1; i <= MAX_COL; ++i){
+		printf("%d ",i);
 	}
 	printf("\n");
 	//打印边框
-	for (int i = 1; i < MAX_COL; ++i){
-		printf("%d", i);
+	for (int i = 1; i <= MAX_COL; ++i){
+		printf("---");
 	}
 	printf("\n");
 	//按行打印具体的地图
 	for (int row = 1; row <= MAX_ROW;++row){
 		printf("%02d|", row);
 		for (int col = 1; col <= MAX_COL; ++col){
-			printf("%c",map[row][col]);
+			printf("%c ",map[row][col]);
 		}
 		printf("\n");
 	}
 }
-void UpdateShowMap(char show_map[MAX_ROW + 2][MAX_COL + 2],
+void UpdataShowMap(char show_map[MAX_ROW + 2][MAX_COL + 2],
 	char mine_map[MAX_ROW + 2][MAX_COL + 2],int row,int col){
 	//根据mine_map计算row，col位置周围雷个数，并将个数展示到show_map上
 	//此处八个边框对应下标不会越界，因为引入了一圈边框[1,MAX_ROW]
