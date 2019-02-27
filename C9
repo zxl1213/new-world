@@ -1,0 +1,142 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_ROW 10
+#define MAX_COL 10
+//默认地雷个数为10
+#define DEFAULT_MINE_COUNT 10
+int Menu(){
+	printf("=======================\n");
+	printf("1.开始游戏\n");
+	printf("0.退出游戏\n");
+	printf("=======================\n");
+	int choice = 0;
+	scanf("%d",&choice);
+	return choice;
+}
+void Init(char show_map[MAX_ROW + 2][MAX_COL + 2],
+	char mine_map[MAX_ROW + 2][MAX_COL + 2]){
+	for (int row = 0; row < MAX_ROW + 2; ++row){
+		for (int col = 0; col < MAX_COL + 2; ++col){
+			show_map[row][col] = '*';
+		}
+	}
+	for (int row = 0; row < MAX_ROW + 2; ++row){
+		for (int col = 0; col < MAX_COL + 2; ++col){
+			mine_map[row][col] = '0';
+		}
+	}
+	//随机构造N个雷，放入雷阵
+	int mine_count = DEFAULT_MINE_COUNT;
+	while (mine_count>0){
+		//随机布置雷阵，产生地雷的坐标,[1,10]
+		int row = rand() % 10 + 1;
+		int col = rand() % 10 + 1;
+		//已有雷，重新产生
+		if (mine_map[row][col]=='1'){
+			continue;
+		}
+		mine_map[row][col] = '1';
+		--mine_count;
+	}
+}
+void DisplayMap(char map[MAX_ROW+2][MAX_COL+2]){
+	printf("   ");
+	//第一行坐标，纵坐标
+	for (int i = 1; i < MAX_COL; ++i){
+		printf("%d",i);
+	}
+	printf("\n");
+	//打印边框
+	for (int i = 1; i < MAX_COL; ++i){
+		printf("%d", i);
+	}
+	printf("\n");
+	//按行打印具体的地图
+	for (int row = 1; row <= MAX_ROW;++row){
+		printf("%02d|", row);
+		for (int col = 1; col <= MAX_COL; ++col){
+			printf("%c",map[row][col]);
+		}
+		printf("\n");
+	}
+}
+void UpdateShowMap(char show_map[MAX_ROW + 2][MAX_COL + 2],
+	char mine_map[MAX_ROW + 2][MAX_COL + 2],int row,int col){
+	//根据mine_map计算row，col位置周围雷个数，并将个数展示到show_map上
+	//此处八个边框对应下标不会越界，因为引入了一圈边框[1,MAX_ROW]
+	//[0,MAX_ROW+1]
+	int mine_cnt = mine_map[row - 1][col - 1] - '0'
+		+ mine_map[row - 1][col] - '0'
+		+ mine_map[row - 1][col + 1] - '0'
+		+ mine_map[row][col - 1] - '0'
+		+ mine_map[row][col + 1] - '0'
+		+ mine_map[row + 1][col - 1] - '0'
+		+ mine_map[row + 1][col] - '0'
+		+ mine_map[row + 1][col + 1] - '0';
+	show_map[row][col] = '0' + mine_cnt;
+}
+
+void Game(){
+	//进行具体的一局扫雷游戏
+	//使用两个二维数组表示地图
+	//第一个，向玩家展示的地图,加上边框
+	//地图格子有以下几种情况
+	//1.没有被掀开，*表示
+	//2.已经被掀开，使用具体数字表示'1','2'
+	char show_map[MAX_ROW + 2][MAX_COL + 2];
+	int blank_cut = 0;
+	//第二个，雷阵
+	//有以下情况
+	//1.有雷，'1'表示
+	//不是雷，'0'表示
+	char mine_map[MAX_ROW + 2][MAX_COL + 2];
+	//1.对这两个数组初始化
+	Init(show_map, mine_map);
+	//2.打印初始地图
+	DisplayMap(show_map);
+	while (1){
+	//3.让玩家输入坐标，并判断坐标是否合法
+		int row, col;
+		printf("请输入坐标：");
+		scanf("%d %d",&row,&col);
+		if (row <= 0 || row > MAX_ROW
+			|| col <= 0 || col > MAX_COL){
+			printf("您的输入不合法，请重新输入\n");
+			continue;
+		}
+		
+	//4.判定玩家是否踩雷，如果踩雷，游戏结束
+		if (mine_map[row][col] == '1'){
+			printf("游戏结束\n");
+			DisplayMap(mine_map);
+			break;
+		}
+	//5.没踩雷，判定是否掀开所有格子（即胜利）
+		++blank_cut;
+		if (blank_cut == MAX_ROW*MAX_COL - DEFAULT_MINE_COUNT){
+			printf("扫雷成功\n");
+			DisplayMap(mine_map);
+			break;
+		}
+	//6.统计周围几个雷，并将数字更新到地图上
+		UpdataShowMap(show_map, mine_map, row, col);
+		DisplayMap(show_map);
+	}
+}
+void Start(){
+	//游戏入口函数，游戏菜单
+	while (1){
+		int choice = Menu();
+		if (choice = 0){
+			//退出游戏
+			break;
+		}
+		Game();
+	}
+}
+int main(){
+	Start();
+    system("pause");
+    return 0;
+}
