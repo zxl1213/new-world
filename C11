@@ -37,3 +37,22 @@ int main(){
 	system("pause");
 	return 0;
 } 
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+int killer(){
+	char killer = 0;
+	for (killer = 'A'; killer <= 'D';killer++){
+		if ((killer != 'A') + (killer == 'C') + (killer == 'D') +
+			(killer != 'D') == 3){
+			printf("凶手是:%c\n",killer);
+			break;
+		}
+	}
+}
+int main(){
+	killer();
+	system("pause");
+	return 0;
+} 
