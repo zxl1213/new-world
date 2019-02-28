@@ -1,0 +1,54 @@
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+void left_rotate(char* str,int k){
+	while (k--){
+		//保存首字符
+		char tmp = *str;
+		char* cur = str;
+		//字符向前挪动一位
+		while (*(cur + 1)){
+			*cur = *(cur + 1);
+			cur++;
+		}
+		//把首字符放到最后一个位置
+		*cur = tmp;
+	}
+}
+void reverse(char* left,char* right){
+	while (left < right){
+		char tmp = *left;
+		*left = *right;
+		*right = tmp;
+		left++;
+		right--;
+	}
+}
+left_rotate2(char* str, int k){
+	//三次逆转
+	//1.逆转前k个字符
+	reverse(str, str + k - 1);
+	//2.逆转剩余字符
+	reverse(str + k, str + strlen(str) - 1);
+	//3.整体逆转
+	reverse(str, str+strlen(str) - 1);
+}
+void right_rotate(char* str,int k){
+	left_rotate2(str, strlen(str) - k);
+}
+int main(){
+	char str[] = "ABCDEFGHIJ";
+	int k;
+	scanf("%d",&k);
+	printf("%s\n",str);
+	left_rotate(str, k);
+	printf("%s\n", str);
+	left_rotate2(str, k);
+	printf("%s\n", str);
+	right_rotate(str, k);
+	printf("%s\n", str);
+	return 0;
+	system("pause");
+	return 0;
+} 
