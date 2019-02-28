@@ -32,3 +32,65 @@ int main(){
 	system("pause");
 	return 0;
 } 
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+int find(int a[3][3], int row, int col, int key, int *px, int *py){
+	//从左上角开始搜索
+	int x = 0;
+	int y = col - 1;
+	//左下角(	x >= row y < 0)搜索结束
+	while (x < row&&y >= 0){
+		if (a[x][y] == key){
+			*px = x;
+			*py = y;
+			return 1;
+		}
+		else if (a[x][y] > key){
+			//向左搜索
+			y--;
+		}
+		else{
+			//向下搜索
+			x++;
+		}
+	}
+	*px = -1;
+	*py = -1;
+	return 0;
+}
+//从左下角开始搜索
+int find_r(int a[3][3], int row, int col, int x, int y, int key, int* px, int* py){
+	//右上角搜索结束
+	if (x<0 || y >= col)
+		return 0;
+	//key>a[x][y],向左搜索
+	if (key > a[x][y])
+		find_r(a, row, col, x, y + 1, key, px, py);
+	//key>a[x][y]向上搜索
+	else if (key < a[x][y])
+		find_r(a, row, col, x - 1, y, key, px, py);
+	else if (key == a[x][y]){
+		*px = x;
+		*py = y;
+		return 1;
+	}
+}
+int main(){
+	int a[3][3] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+	int n;
+	int px, py;
+	scanf("%d",&n);
+	//左下角
+	if (find_r(a,3,3,2,0,n,&px,&py)){
+	//if (find(a, 3, 3, n, &px, &py)){
+		printf("%d,%d\n",px,py);
+	}
+	else{
+		printf("%d不存在\n",n);
+	}
+	return 0;
+	system("pause");
+	return 0;
+} 
