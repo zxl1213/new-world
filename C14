@@ -52,3 +52,62 @@ int main(){
 	system("pause");
 	return 0;
 } 
+///////////////////////////////////////////
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+void left_rotate(char* str,int k){
+	while (k--){
+		//保存首字符
+		char tmp = *str;
+		char* cur = str;
+		//字符向前挪动一位
+		while (*(cur + 1)){
+			*cur = *(cur + 1);
+			cur++;
+		}
+		//把首字符放到最后一个位置
+		*cur = tmp;
+	}
+}
+void reverse(char* left,char* right){
+	while (left < right){
+		char tmp = *left;
+		*left = *right;
+		*right = tmp;
+		left++;
+		right--;
+	}
+}
+left_rotate2(char* str, int k){
+	//三次逆转
+	//1.逆转前k个字符
+	reverse(str, str + k - 1);
+	//2.逆转剩余字符
+	reverse(str + k, str + strlen(str) - 1);
+	//3.整体逆转
+	reverse(str, str+strlen(str) - 1);
+}
+void right_rotate(char* str,int k){
+	left_rotate2(str, strlen(str) - k);
+}
+int is_rotate(char* dest,char* src){
+	if (strlen(dest) != strlen(src))
+		return 0;
+	int len = strlen(src);
+	while (len--){
+		right_rotate(src, 1);
+		if (strcmp(dest, src) == 0)
+			return 1;
+	}
+	return 0;
+}
+int main(){
+	char dest[100];
+	char src[100];
+	scanf("%s",dest);
+	scanf("%s",src);
+	printf("%d", is_rotate(dest, src));
+	system("pause");
+	return 0;
+} 
