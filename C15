@@ -42,3 +42,23 @@ int main(){
 	system ("pause");
 	return 0;
 }
+//3.实现strcpy
+#include <stdio.h>
+#include <assert.h>
+#include <stdio.h>
+char* Strcpy(char* dest ,const char* src){
+     assert(dest!=NULL);
+     assert(src!=NULL);
+     int i=0;
+     for(;src[i]!='\0';++i){
+             dest[i]=src[i];
+         }
+        dest[i]='\0';
+        return dest;
+}
+int main(){
+  char dest[]="haha";
+  Strcpy(dest,"dddddd");
+  printf("%s\n",dest);
+  return 0;
+}
