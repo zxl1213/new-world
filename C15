@@ -63,14 +63,26 @@ int main(){
   return 0;
 }
 //strcpy: 
-  1 #include <stdio.h>
-  2 #include <string.h>
-  3 int main(){
-  4   char str1[1024]="haha";                                                                
-  5   char str2[]="hehe";
-  6   strcat(str1,str2);
-  7   printf("%s\n",str1);
-  8   return 0;
-  9 }
-~
+#include <stdio.h>                                                                       
+#include <assert.h>  
+ char* Strcat(char* dest,char* src){
+   assert(dest!=NULL);
+   assert(src!=NULL);      
+   int i=0;
+   for(;dest[i]!='\0';++i);   
+   int j=0;         
+   for(;src[j]!='\0';++j,++i){
+     dest[i]=src[j];
+    }           
+    dest[i]='\0';
+    return dest;
+  }                        
+  int main(){          
+    char str1[1024]="haha";
+    char str2[]="hehe"; 
+    Strcat(str1,str2);
+    printf("%s\n",str1);
+   return 0;         
+ }                                                                                        
+ 
 
