@@ -54,13 +54,18 @@ Date Date::operator--(int){
   return d;
 }
 bool Date::operator>(const Date& d)const{
-  if(this->_year>=d._year
-      &&this->_month>=d._month
-      &&this->_day>d._day){
+  if(this->_year>d._year){
     return true;
-  }else{
-    return false;
-  }   
+  }if(this->_year==d._year){
+    if(this->_month>d._month){
+      return true;
+    }if(this->_year==d._year&&this->_month>d._month){
+      if(this->_day>d._day){
+        return true;
+      }
+    }
+  }
+  return false;
 }
 bool Date::operator>=(const Date& d)const{
   if(*this>d||*this==d){
