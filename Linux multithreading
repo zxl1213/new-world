@@ -1,0 +1,166 @@
+线程/进程:
+	linux下线程以进程的pcb模拟实现线程,因此linux下pcb是线程,也叫轻量级进程,进程是线程组
+	linux线程是pcb------------------------因此线程是cpu调度的基本单位
+	程序运行起来,资源是分配给整个进程组的,因此进程是资源分配的基本单位
+优缺点对比:
+		一个进程中的线程共用同一个虚拟地址空间
+		线程间通信更加方便
+		线程的创建/销毁成本更低
+		线程间调度切换成本更低
+		线程的执行粒度更细	
+		线程间缺乏访问控制----系统调用(exit),异常针对整个进程,健壮性低
+多进程/多线程进行多任务处理的优势体现和细节:
+		cpu密集型程序
+		io密集型程序
+			vfork创建一个子进程共用同一个虚拟地址空间,怕调用栈混乱,因此子进程运行完毕或程序替换后父进程才运行
+			多线程使用同一个虚拟地址空间:如何实现同时运行而不会出现调用栈混乱?
+										为每个线程在虚拟地址空间中单独分配一块空间
+	每个线程都会有一些独立的信息
+			栈
+			寄存器(上下文数据)
+			errno
+			信号屏蔽字()
+			调度优先级	
+	线程之间共享的数据:
+			代码段,数据段
+			文件描述符表
+			每种信号的处理方式
+			用户id组id,当前工作路径
+线程/进程:
+	linux下线程以进程的pcb模拟实现线程,因此linux下pcb是线程,也叫轻量级进程,进程是线程组
+	linux线程是pcb------------------------因此线程是cpu调度的基本单位
+	程序运行起来,资源是分配给整个进程组的,因此进程是资源分配的基本单位
+优缺点对比:
+		一个进程中的线程共用同一个虚拟地址空间
+		线程间通信更加方便
+		线程的创建/销毁成本更低
+		线程间调度切换成本更低
+		线程的执行粒度更细	
+		线程间缺乏访问控制----系统调用(exit),异常针对整个进程,健壮性低
+多进程/多线程进行多任务处理的优势体现和细节:
+		cpu密集型程序
+		io密集型程序
+			vfork创建一个子进程共用同一个虚拟地址空间,怕调用栈混乱,因此子进程运行完毕或程序替换后父进程才运行
+			多线程使用同一个虚拟地址空间:如何实现同时运行而不会出现调用栈混乱?
+										为每个线程在虚拟地址空间中单独分配一块空间
+	每个线程都会有一些独立的信息
+			栈
+			寄存器(上下文数据)
+			errno
+			信号屏蔽字()
+			调度优先级	
+	线程之间共享的数据:
+			代码段,数据段
+			文件描述符表
+			每种信号的处理方式
+			用户id组id,当前工作路径
+//生产者与消费者模型                                                                                                                                                                                                                          
+#include <iostream>    
+#include <queue>    
+#include <pthread.h>    
+using namespace std;    
+class BlockQueue{    
+  public:    
+    BlockQueue(int cap=10):capacity(cap){    
+      pthread_mutex_init(&_mutex,NULL);    
+      pthread_cond_init(&_producer,NULL);    
+      pthread_cond_init(&_consumer,NULL);    
+    
+    }    
+    ~BlockQueue(){    
+      pthread_mutex_destroy(&_mutex);    
+      pthread_cond_destroy(&_producer);    
+      pthread_cond_destroy(&_producer);    
+    }    
+    bool QueuePush(int data){    
+      QueueLock();    
+      while(QueueFull()){    
+        ProducerWait();    
+      }    
+      _queue.push(data);    
+      ConsumerWakeup();    
+      QueueUnlock();    
+      return true;    
+    }    
+    bool QueuePop(int *data){    
+      QueueLock();    
+      while(QueueEmpty()){    
+        ConsumerWait();    
+      }    
+      *data=_queue.front();    
+      _queue.pop();    
+      ProducerWakeup();    
+      QueueUnlock();    
+      return true;    
+    }    
+  private:    
+    void QueueLock(){    
+      pthread_mutex_lock(&_mutex);    
+    }    
+    void QueueUnlock(){    
+      pthread_mutex_unlock(&_mutex);    
+    }    
+    bool QueueEmpty(){    
+      return _queue.empty();    
+    }    
+    bool QueueFull(){    
+      return (capacity==(int)_queue.size());    
+    }    
+    void ProducerWait(){    
+      pthread_cond_wait(&_producer,&_mutex);    
+    }    
+    void ProducerWakeup(){    
+      pthread_cond_signal(&_producer);    
+    }    
+    void ConsumerWait(){    
+      pthread_cond_wait(&_consumer,&_mutex);    
+    }    
+    void ConsumerWakeup(){    
+      pthread_cond_signal(&_consumer);    
+    }                                      
+    std::queue<int> _queue;
+    int capacity;                
+    pthread_mutex_t _mutex;
+    pthread_cond_t _producer;
+    pthread_cond_t _consumer;
+};         
+void *thr_producer(void *arg){
+   int i=0;                
+  BlockQueue *q=(BlockQueue*)arg;
+  while(1){           
+    cout<<"push data "<<i<<endl;
+    q->QueuePush(i++);           
+  }                   
+}                             
+void *thr_consumer(void *arg){
+  BlockQueue* q=(BlockQueue*)arg;
+  while(1){                    
+  int data;            
+  q->QueuePop(&data);      
+  cout<<"constomer get data"<<data<<endl;
+  }                   
+  return NULL;
+}             
+int main(){              
+  BlockQueue q;                       
+  pthread_t ptid[4],ctid[4];
+  for(int i=0;i<4;i++){    
+    int ret=pthread_create(&ptid[i],NULL,thr_producer,(void*)&q);
+    if(ret!=0){
+      cout<<"create producer error"<<endl;
+    }                           
+  }      
+  for(int i=0;i<4;i++){  
+    int ret=pthread_create(&ctid[i],NULL,thr_consumer,(void*)&q);
+    if(ret!=0){
+      cout<<"create consumer error"<<endl;
+    }                                           
+  }      
+  for(int i=0;i<4;i++){       
+    pthread_join(ptid[i],NULL);           
+  }      
+  for(int i=0;i<4;i++){     
+    pthread_join(ctid[i],NULL);                 
+  }      
+  return 0;                   
+}                                                            
